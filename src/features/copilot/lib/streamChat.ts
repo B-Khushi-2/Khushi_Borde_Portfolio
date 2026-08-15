@@ -6,6 +6,7 @@
  */
 import type { MessageRole } from "@/features/copilot/types";
 import type { StructuredEvaluation } from "@/features/recruiter-mode/types";
+import { getApiUrl } from "@/lib/utils";
 
 export interface ChatHistoryMessage {
   role: MessageRole;
@@ -84,7 +85,7 @@ export async function streamChatCompletion({
 }: StreamChatOptions): Promise<void> {
   let response: Response;
   try {
-    response = await fetch("/api/chat/stream", {
+    response = await fetch(getApiUrl("/api/chat/stream"), {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ messages, ...(sessionId ? { sessionId } : {}) }),

@@ -1,5 +1,6 @@
 import type { PortfolioData } from "@/lib/portfolioBridge";
 import type { AiHiringReport } from "@/features/recruiter-mode/types";
+import { getApiUrl } from "@/lib/utils";
 
 export class HiringReportError extends Error {
   code: string;
@@ -141,7 +142,7 @@ export async function generateHiringReport({
 
   let response: Response;
   try {
-    response = await fetch("/api/chat", {
+    response = await fetch(getApiUrl("/api/chat"), {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ messages: [{ role: "user", content: prompt }] }),

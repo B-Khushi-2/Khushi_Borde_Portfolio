@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { getPortfolioData } from "@/lib/portfolioBridge";
+import { getApiUrl } from "@/lib/utils";
 
 export interface WorkspaceAnalysis {
   overview: {
@@ -87,7 +88,7 @@ export function useWorkspaceAnalysis(isOpen: boolean) {
           ? `CANDIDATE: ${portfolio.profile.name}\nSKILLS: ${portfolio.nodes.skills.map((s: any) => s.label).join(", ")}`
           : "";
 
-        const res = await fetch("/api/recruiter/workspace", {
+        const res = await fetch(getApiUrl("/api/recruiter/workspace"), {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ portfolioDigest: digest })

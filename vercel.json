@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://srv-d9vvo46417fc73aiem80.onrender.com/api/:path*"
+    }
+  ]
+}

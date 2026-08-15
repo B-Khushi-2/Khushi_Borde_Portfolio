@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
 import { generateId } from "@/lib/id";
+import { getApiUrl } from "@/lib/utils";
 
 export const WALKTHROUGH_STEPS = [
   {
@@ -309,7 +310,7 @@ export function IntelligenceProvider({ children }: { children: React.ReactNode }
 
   const fetchTelemetry = useCallback(async () => {
     try {
-      const res = await fetch("/api/recruiter/telemetry");
+      const res = await fetch(getApiUrl("/api/recruiter/telemetry"));
       if (res.ok) {
         const data = await res.json();
         setTelemetry(data);
