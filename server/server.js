@@ -101,25 +101,7 @@ app.use(notFoundHandler);
 app.use(errorHandler);
 
 // ---- Startup diagnostics ---------------------------------------------------
-// Missing config is the most common reason either backend feature silently
-// fails. Check once at boot and say exactly what's wrong, rather than only
-// discovering it when a form/chat request 500s.
 (function checkEnvSetup() {
-  const envPath = path.resolve(process.cwd(), ".env");
-  const envExists = fs.existsSync(envPath);
-  const requiredSmtp = ["SMTP_HOST", "SMTP_PORT", "SMTP_USER", "SMTP_PASS"];
-  const missingSmtp = requiredSmtp.filter((key) => !process.env[key]);
-
-  if (!envExists) {
-    logger.warn(
-      `No .env file found at ${envPath}. Run "cp .env.example .env", fill in real values, and restart.`
-    );
-  } else if (missingSmtp.length) {
-    logger.warn(`.env is missing: ${missingSmtp.join(", ")} — the contact form will fail until these are set.`);
-  } else {
-    logger.info(`Contact form ready — sending as ${process.env.SMTP_USER}.`);
-  }
-
   config.validateStartup(logger);
 })();
 
