@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  ci:
+    name: Build & Verify
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Root / App Dependencies
+        run: |
+          if [ -d "portfolio-react" ]; then cd portfolio-react; fi
+          npm ci || npm install
+
+      - name: Install Server Dependencies
+        run: |
+          if [ -d "portfolio-react/server" ]; then
+            cd portfolio-react/server
+          elif [ -d "server" ]; then
+            cd server
+          fi
+          npm ci || npm install
+
+      - name: Type Check (TypeScript)
+        run: |
+          if [ -d "portfolio-react" ]; then cd portfolio-react; fi
+          npx tsc -b
+
+      - name: Linting (oxlint)
+        run: |
+          if [ -d "portfolio-react" ]; then cd portfolio-react; fi
+          npx oxlint src
+
+      - name: Build Application
+        run: |
+          if [ -d "portfolio-react" ]; then cd portfolio-react; fi
+          npm run build

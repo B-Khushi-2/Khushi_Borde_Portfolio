@@ -1,0 +1,174 @@
+@import "tailwindcss";
+
+/* ----------------------------------------------------------------------
+   The legacy site's own design system (2500+ lines of hand-tuned CSS —
+   gradients, the knowledge-graph canvas theme, the terminal, etc). Kept
+   verbatim so every migrated section is pixel-identical to the original.
+   ---------------------------------------------------------------------- */
+@import "./styles/legacy-site.css";
+
+/* ----------------------------------------------------------------------
+   New design tokens, scoped under [data-copilot-root], used ONLY by the
+   AI Recruiter Copilot widget (shadcn/ui + Tailwind v4 theme). Scoping
+   these means the new widget's tokens never leak into / fight with the
+   legacy site's own --c-* variables above.
+   ---------------------------------------------------------------------- */
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+
+[data-copilot-root] {
+  --background: 222 47% 4%;
+  --foreground: 210 20% 98%;
+  --card: 222 45% 7%;
+  --card-foreground: 210 20% 98%;
+  --popover: 222 45% 7%;
+  --popover-foreground: 210 20% 98%;
+  --primary: 262 83% 62%;
+  --primary-foreground: 210 20% 98%;
+  --secondary: 217 33% 13%;
+  --secondary-foreground: 210 20% 98%;
+  --muted: 217 33% 13%;
+  --muted-foreground: 217 15% 65%;
+  --accent: 168 76% 62%;
+  --accent-foreground: 222 47% 4%;
+  --destructive: 0 72% 60%;
+  --destructive-foreground: 210 20% 98%;
+  --border: 217 30% 18%;
+  --input: 217 30% 14%;
+  --ring: 262 83% 62%;
+  --radius: 1.25rem;
+
+  color-scheme: dark;
+  font-family: var(--font-sans);
+}
+
+@layer base {
+  [data-copilot-root] *,
+  [data-copilot-root] *::before,
+  [data-copilot-root] *::after {
+    border-color: hsl(var(--border));
+  }
+}
+
+/* Custom scrollbar for the chat panel */
+[data-copilot-root] .copilot-scroll::-webkit-scrollbar {
+  width: 5px;
+}
+[data-copilot-root] .copilot-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+[data-copilot-root] .copilot-scroll::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 999px;
+  transition: background 0.3s var(--ease);
+}
+[data-copilot-root] .copilot-scroll::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--primary) / 0.4);
+}
+
+/* Typing cursor */
+@keyframes copilot-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+.copilot-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  margin-left: 2px;
+  vertical-align: -0.15em;
+  background: currentColor;
+  animation: copilot-blink 0.9s step-start infinite;
+}
+
+/* Thinking dots */
+@keyframes copilot-dot-bounce {
+  0%, 80%, 100% { transform: translateY(0); opacity: 0.5; }
+  40% { transform: translateY(-4px); opacity: 1; }
+}
+.copilot-dot {
+  animation: copilot-dot-bounce 1.2s ease-in-out infinite;
+}
+
+/* Skeleton shimmer */
+@keyframes copilot-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.copilot-skeleton {
+  background: linear-gradient(
+    90deg,
+    hsl(var(--muted)) 25%,
+    hsl(var(--secondary)) 37%,
+    hsl(var(--muted)) 63%
+  );
+  background-size: 400% 100%;
+  animation: copilot-shimmer 1.6s ease-in-out infinite;
+}
+
+/* ----------------------------------------------------------------------
+   Recruiter Mode — same shadcn/Tailwind v4 token set as the copilot
+   widget above, scoped separately under [data-recruiter-root] so it
+   theme-matches the rest of the "new UI" without coupling the two
+   features together.
+   ---------------------------------------------------------------------- */
+[data-recruiter-root] {
+  --background: 222 47% 4%;
+  --foreground: 210 20% 98%;
+  --card: 222 45% 7%;
+  --card-foreground: 210 20% 98%;
+  --popover: 222 45% 7%;
+  --popover-foreground: 210 20% 98%;
+  --primary: 262 83% 62%;
+  --primary-foreground: 210 20% 98%;
+  --secondary: 217 33% 13%;
+  --secondary-foreground: 210 20% 98%;
+  --muted: 217 33% 13%;
+  --muted-foreground: 217 15% 65%;
+  --accent: 168 76% 62%;
+  --accent-foreground: 222 47% 4%;
+  --destructive: 0 72% 60%;
+  --destructive-foreground: 210 20% 98%;
+  --border: 217 30% 18%;
+  --input: 217 30% 14%;
+  --ring: 262 83% 62%;
+  --radius: 1.25rem;
+
+  color-scheme: dark;
+  font-family: var(--font-sans);
+}
+
+[data-recruiter-root] *,
+[data-recruiter-root] *::before,
+[data-recruiter-root] *::after {
+  border-color: hsl(var(--border));
+}
+
+/* "Generate PDF" prints just the report body via the browser's native
+   print dialog — no extra dependency needed. Everything outside the
+   report is hidden, and the report itself is reset out of its fixed/
+   scrolling overlay layout so it paginates naturally. */
+@media print {
+  /* Recruiter Mode's overlay renders as a sibling of the legacy site
+     sections under #root (Provider/ErrorBoundary are non-DOM wrappers),
+     so hide every other #root child rather than body's children — #root
+     itself isn't marked, and hiding it would take the overlay down too. */
+  #root > *:not([data-recruiter-root]) {
+    display: none !important;
+  }
+  [data-recruiter-root] {
+    position: static !important;
+    inset: auto !important;
+    height: auto !important;
+    background: white !important;
+    color: black !important;
+  }
+  [data-recruiter-root] #recruiter-print-root {
+    overflow: visible !important;
+    height: auto !important;
+  }
+  [data-recruiter-root] .print\:hidden {
+    display: none !important;
+  }
+}

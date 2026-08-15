@@ -1,0 +1,9 @@
+export { Nav } from "@/features/legacy-site/components/Nav";
+export { Hero } from "@/features/legacy-site/components/Hero";
+export { GraphSection } from "@/features/legacy-site/components/GraphSection";
+export { R3FKnowledgeGraph } from "@/features/legacy-site/components/R3FKnowledgeGraph/R3FKnowledgeGraph";
+export { SkillsSection } from "@/features/legacy-site/components/SkillsSection";
+export { ProjectsSection } from "@/features/legacy-site/components/ProjectsSection";
+export { ExperienceSection } from "@/features/legacy-site/components/ExperienceSection";
+export { AchievementsSection } from "@/features/legacy-site/components/AchievementsSection";
+export { ContactSection } from "@/features/legacy-site/components/ContactSection";

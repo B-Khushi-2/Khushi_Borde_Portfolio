@@ -1,0 +1,33 @@
+{
+  "name": "recruiter-copilot-server",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Express backend for the portfolio's contact form and AI Recruiter Copilot chat API.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "kb:sync": "node ../scripts/sync-data.cjs",
+    "kb:generate": "npm run kb:sync && node scripts/generate-knowledge.js",
+    "kb:build": "node scripts/build-index.js",
+    "kb:rebuild": "npm run kb:generate && npm run kb:build",
+    "eval:rag": "node scripts/eval-rag.js"
+  },
+  "dependencies": {
+    "compression": "^1.7.5",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.2",
+    "express-rate-limit": "^7.4.1",
+    "helmet": "^7.2.0",
+    "nodemailer": "^6.9.16",
+    "pino": "^9.5.0",
+    "pino-http": "^10.3.0"
+  },
+  "devDependencies": {
+    "pino-pretty": "^11.3.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
